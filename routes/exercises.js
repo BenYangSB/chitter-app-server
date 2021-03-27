@@ -10,7 +10,6 @@ router.route('/').get((req, res) => {
 
 router.route('/add').post((req, res) => {
 
-  console.log("HERE");
   const username = req.body.username;
   const userKey = req.body.userKey;
   const description = req.body.description;
@@ -25,14 +24,14 @@ router.route('/add').post((req, res) => {
     username,
     userKey,
     description,
-    instructions,
     duration,
     date,
     ingredients,
     image,
+    instructions,
   });
 
-  console.log(image)
+  console.log("uploading")
 
   newExercise.save()
   .then(() => res.json('Exercise added!'))
@@ -74,11 +73,11 @@ router.route('/update/:id').post((req, res) => {
       exercise.username = exercise.username;
       exercise.userKey = exercise.userKey;
       exercise.description = req.body.description;
+      exercise.instructions = re.body.instructions;
       exercise.duration = Number(req.body.duration);
       exercise.date = exercise.date;
       exercise.ingredients = req.body.ingredients;
       exercise.image = req.body.image;
-      exercise.instructions = re.body.instructions;
 
       exercise.save()
         .then(() => res.json('Exercise updated!'))
