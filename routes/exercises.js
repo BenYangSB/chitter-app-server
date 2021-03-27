@@ -18,12 +18,14 @@ router.route('/add').post((req, res) => {
   const date = Date.parse(req.body.date);
   const ingredients = req.body.ingredients;
   const image = req.body.image;
+  const instructions = req.body.instructions;
 
 
   const newExercise = new Exercise({
     username,
     userKey,
     description,
+    instructions,
     duration,
     date,
     ingredients,
@@ -76,7 +78,7 @@ router.route('/update/:id').post((req, res) => {
       exercise.date = exercise.date;
       exercise.ingredients = req.body.ingredients;
       exercise.image = req.body.image;
-
+      exercise.instructions = re.body.instructions;
 
       exercise.save()
         .then(() => res.json('Exercise updated!'))
