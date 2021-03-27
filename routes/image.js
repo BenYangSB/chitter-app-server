@@ -2,6 +2,8 @@ var express = require('express');
 var Image = require('../models/image');
 var ImageRouter = express.Router();
 const multer = require('multer');
+const path = require('path')
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -52,6 +54,13 @@ ImageRouter.route("/uploadmulter")
             })
             .catch((err) => next(err));
     });
+
+ImageRouter.route("/picture/:id").get((req, res) => {
+    let repath = path.join(__dirname, '../')
+    const filePath = (repath + 'uploads/'+req.params.id);
+    console.log(filePath)
+    res.sendFile(filePath)
+});
 
 
 module.exports = ImageRouter;

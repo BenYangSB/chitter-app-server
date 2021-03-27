@@ -9,12 +9,16 @@ router.route('/').get((req, res) => {
 });
 
 router.route('/add').post((req, res) => {
+
+  console.log("HERE");
   const username = req.body.username;
   const userKey = req.body.userKey;
   const description = req.body.description;
   const duration = Number(req.body.duration);
   const date = Date.parse(req.body.date);
   const ingredients = req.body.ingredients;
+  const image = req.body.image;
+
 
   const newExercise = new Exercise({
     username,
@@ -23,7 +27,10 @@ router.route('/add').post((req, res) => {
     duration,
     date,
     ingredients,
+    image,
   });
+
+  console.log(image)
 
   newExercise.save()
   .then(() => res.json('Exercise added!'))
@@ -68,6 +75,8 @@ router.route('/update/:id').post((req, res) => {
       exercise.duration = Number(req.body.duration);
       exercise.date = exercise.date;
       exercise.ingredients = req.body.ingredients;
+      exercise.image = req.body.image;
+
 
       exercise.save()
         .then(() => res.json('Exercise updated!'))
