@@ -21,9 +21,12 @@ connection.once('open', ()=>{
 
 const exercisesRouter = require('./routes/exercises');
 const usersRouter = require('./routes/users');
+const imgRouter = require('./routes/image');
+
 
 app.use('/exercises', exercisesRouter);
 app.use('/users', usersRouter);
+app.use('/image', imgRouter);
 
 app.get("/", (req,res) => {
     console.log(process.env.PORT)
