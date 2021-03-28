@@ -8,7 +8,7 @@ require('dotenv/config')
 
 
 const s3 = new AWS.S3({
-    accessKeyId: process.env.AWS_ID,
+    accessKeyId: "AKIAZ7CF2ZAR2EUDUYKM",
     secretAccessKey: process.env.AWS_SECRET
 })
 
@@ -26,13 +26,8 @@ const upload = multer({storage}).single('image')
 */
 ImageRouter.route("/uploadmulter").post(upload, (req, res) => {
         
-    
-        console.log("UPLOADING TO AWS")
 
-        // const newImage = new Image({
-        //     imageName: req.body.imageName,
-        //     imageData: req.file.path
-        // });
+        console.log("UPLOADING NOW")
 
         const params = {
             Bucket: process.env.AWS_BUCKETNAME,
@@ -42,12 +37,14 @@ ImageRouter.route("/uploadmulter").post(upload, (req, res) => {
 
         s3.upload(params, (error, data)=> {
             if(error){
+                console.log(process.env.AWS_ID)
                 res.status(500).send(error)
             }
             console.log(data)
             res.send(data)
         })
     });
+
 
 ImageRouter.route("/picture/:id").get((req, res) => {
     let repath = path.join(__dirname, '../')
