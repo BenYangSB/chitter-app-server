@@ -70,10 +70,13 @@ router.route('/update/:id').post((req, res) => {
 
   Exercise.findById(req.params.id)
     .then(exercise => {
+      console.log(exercise)
+      console.log(req.body)
+
       exercise.username = exercise.username;
       exercise.userKey = exercise.userKey;
       exercise.description = req.body.description;
-      exercise.instructions = re.body.instructions;
+      exercise.instructions = req.body.instructions;
       exercise.duration = Number(req.body.duration);
       exercise.date = exercise.date;
       exercise.ingredients = req.body.ingredients;
@@ -81,9 +84,9 @@ router.route('/update/:id').post((req, res) => {
 
       exercise.save()
         .then(() => res.json('Exercise updated!'))
-        .catch(err => res.status(400).json('Error: ' + err));
+        .catch(err => console.log(err));
     })
-    .catch(err => res.status(400).json('Error: ' + err));
+    .catch(err => console.log(err));
 });
 
 module.exports = router;
