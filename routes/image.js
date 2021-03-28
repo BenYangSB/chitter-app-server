@@ -3,56 +3,50 @@ var Image = require('../models/image');
 var ImageRouter = express.Router();
 const multer = require('multer');
 const path = require('path')
+const AWS = require('aws-sdk')
+require('dotenv/config')
 
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, './uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + file.originalname);
+const s3 = new AWS.S3({
+    accessKeyId: process.env.AWS_ID,
+    secretAccessKey: process.env.AWS_SECRET
+})
+
+const storage = multer.memoryStorage({
+    destination: function(req, file, callback) {
+        callback(null, '')
     }
-});
+})
 
-const fileFilter = (req, file, cb) => {
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
-        cb(null, true);
-    } else {
-        // rejects storing a file
-        cb(null, false);
-    }
-}
-
-const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 1024 * 1024 * 5
-    },
-    fileFilter: fileFilter
-});
-
+const upload = multer({storage}).single('image')
 /* 
     stores image in uploads folder
     using multer and creates a reference to the 
     file
 */
-ImageRouter.route("/uploadmulter")
-    .post(upload.single('imageData'), (req, res, next) => {
-        console.log(req.body);
-        const newImage = new Image({
-            imageName: req.body.imageName,
-            imageData: req.file.path
-        });
+ImageRouter.route("/uploadmulter").post(upload, (req, res) => {
+        
+    
+        console.log("UPLOADING TO AWS")
 
-        newImage.save()
-            .then((result) => {
-                console.log(result);
-                res.status(200).json({
-                    success: true,
-                    document: result
-                });
-            })
-            .catch((err) => next(err));
+        // const newImage = new Image({
+        //     imageName: req.body.imageName,
+        //     imageData: req.file.path
+        // });
+
+        const params = {
+            Bucket: process.env.AWS_BUCKETNAME+ '/assets',
+            Key: req.body.imageName,
+            Body: req.file.buffer,
+        }
+
+        s3.upload(params, (error, data)=> {
+            if(error){
+                res.status(500).send(error)
+            }
+            console.log(data)
+            res.send(data)
+        })
     });
 
 ImageRouter.route("/picture/:id").get((req, res) => {
