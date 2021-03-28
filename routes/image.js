@@ -35,7 +35,7 @@ ImageRouter.route("/uploadmulter").post(upload, (req, res) => {
         // });
 
         const params = {
-            Bucket: process.env.AWS_BUCKETNAME+ '/assets',
+            Bucket: process.env.AWS_BUCKETNAME,
             Key: req.body.imageName,
             Body: req.file.buffer,
         }
