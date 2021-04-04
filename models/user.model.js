@@ -16,8 +16,8 @@ const userSchema = new Schema({
         trim: true,
     },
     following: { type: Array, required: true },
-    followers: {type: Number, required: true}
-
+    followers: {type: Number, required: true},
+    recipes: {type: Array, required: true}  // this should be an array of the object id's of the recipes the user has uploaded and saved
 }, {
     timestamps: true,
 });
