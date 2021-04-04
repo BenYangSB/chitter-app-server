@@ -8,7 +8,7 @@ require('dotenv/config')
 
 
 const s3 = new AWS.S3({
-    accessKeyId: "AKIAZ7CF2ZAR2EUDUYKM",
+    accessKeyId: process.env.AWS_ID,
     secretAccessKey: process.env.AWS_SECRET
 })
 
@@ -43,7 +43,7 @@ ImageRouter.route("/uploadmulter").post(upload, (req, res) => {
             console.log(data)
             res.send(data)
         })
-    });
+});
 
 
 ImageRouter.route("/picture/:id").get((req, res) => {
