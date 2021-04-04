@@ -59,7 +59,7 @@ router.route('/add').post((req, res) => {
   if (req.body.following)
     newFollowing = req.body.following;
   if (req.body.followers)
-    newFollowers = req.body.following;
+    newFollowers = req.body.followers;
   if (req.body.recipes)
     recipes = req.body.recipes;
 
