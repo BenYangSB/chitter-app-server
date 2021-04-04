@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const axios = require('axios');
 let Exercise = require('../models/exercise.model');
 let User = require('../models/user.model');
 
@@ -34,7 +35,7 @@ router.route('/add').post((req, res) => {
   console.log("uploading")
 
   newExercise.save()
-  .then(() => res.json('Exercise added!'))
+  .then(() => res.json('Exercise added!'))    // im trying to make res get set to the object id fo the newly saved recipe (not sure how)
   .catch(err => res.status(400).json('Error: ' + err));
 });
 

@@ -55,7 +55,7 @@ router.route('/add').post((req, res) => {
   // to allow for req not having anything for following, followers, and recipes
   let newFollowing = [];
   let newFollowers = 0;
-  let recipes = [];
+  let recipes = ['none'];
   if (req.body.following)
     newFollowing = req.body.following;
   if (req.body.followers)
