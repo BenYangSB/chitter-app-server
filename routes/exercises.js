@@ -35,7 +35,7 @@ router.route('/add').post((req, res) => {
   console.log("uploading")
 
   newExercise.save()
-  .then(() => res.json('Exercise added!'))    // im trying to make res get set to the object id fo the newly saved recipe (not sure how)
+  .then(() => res.json(newExercise._id))    // im trying to make res get set to the object id fo the newly saved recipe (not sure how)
   .catch(err => res.status(400).json('Error: ' + err));
 });
 
