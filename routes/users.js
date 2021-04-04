@@ -7,14 +7,14 @@ const axios = require('axios');
 
 router.route('/trending').get((req, res) => {
   console.log(req.headers)
-  
-  axios.get('https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=' + req.headers.name +'&key=AIzaSyBYELaVxa1NaNwk0yHNOvkpr2epM1b5O00')
-  .then(response => {
+
+  axios.get('https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=' + req.headers.name + '&key=AIzaSyBYELaVxa1NaNwk0yHNOvkpr2epM1b5O00')
+    .then(response => {
       res.json(response.data);
-  })
-  .catch(error => {
-    console.log(error);
-  });
+    })
+    .catch(error => {
+      console.log(error);
+    });
 });
 router.route('/').get((req, res) => {
   User.find()
@@ -24,13 +24,13 @@ router.route('/').get((req, res) => {
 
 router.route('/:key').get((req, res) => {
 
-  User.find({userKey: String(req.params.key)})
+  User.find({ userKey: String(req.params.key) })
     .then(users => res.json(users))
     .catch(err => res.json(req.body))
 });
 
 router.route('/update/:id').post((req, res) => {
-  
+
   User.findByIdAndUpdate(mongoose.Types.ObjectId(req.params.id))
     .then(users => {
       users.username = req.body.username;
@@ -54,22 +54,34 @@ router.route('/add').post((req, res) => {
   const saved = req.body.saved;
   const newUser = new User({username,userKey,following,followers, saved});
 
-  let result  = 0;
+  // to allow for req not having anything for following, followers, and recipes
+  let newFollowing = [];
+  let newFollowers = 0;
+  let recipes = ['none'];
+  if (req.body.following)
+    newFollowing = req.body.following;
+  if (req.body.followers)
+    newFollowers = req.body.followers;
+  if (req.body.recipes)
+    recipes = req.body.recipes;
 
-  User.find({userKey: userKey})
+  const newUser = new User({ username, userKey, newFollowing, newFollowers, recipes });
+
+  let result = 0;
+
+  User.find({ userKey: userKey })
     .then(users => {
-          result = users.length;
-          if(result ==0 ){
-            newUser.save()
-            .then(() => res.json('ADDED INTO DATABASE'))
-            .catch(err => res.status(400).json('Error: ' + err));
-          }
-          else{
-            res.json("FOUND IN DATABSE")
-          }
+      result = users.length;
+      if (result == 0) {
+        newUser.save()
+          .then(() => res.json('ADDED INTO DATABASE'))
+          .catch(err => res.status(400).json('Error: ' + err));
+      }
+      else {
+        res.json("FOUND IN DATABSE")
+      }
 
-  })
-
+    })
 
 });
 
