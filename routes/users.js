@@ -37,6 +37,7 @@ router.route('/update/:id').post((req, res) => {
       users.userKey = req.body.userKey;
       users.following = req.body.following;
       users.followers = req.body.followers;
+      users.saved = req.body.saved;
 
       users.save()
         .then(() => res.json('User updated!'))
@@ -50,7 +51,8 @@ router.route('/add').post((req, res) => {
   const userKey = req.body.userKey;
   const following = req.body.following;
   const followers = req.body.followers;
-  const newUser = new User({username,userKey,following,followers});
+  const saved = req.body.saved;
+  const newUser = new User({username,userKey,following,followers, saved});
 
   let result  = 0;
 
