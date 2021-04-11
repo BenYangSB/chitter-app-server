@@ -19,6 +19,8 @@ router.route('/add').post((req, res) => {
   const ingredients = req.body.ingredients;
   const image = req.body.image;
   const instructions = req.body.instructions;
+  const totalRating = req.body.totalRating;
+  const numRatings = req.body.numRatings;
 
 
   const newExercise = new Exercise({
@@ -30,6 +32,8 @@ router.route('/add').post((req, res) => {
     ingredients,
     image,
     instructions,
+    totalRating,
+    numRatings,
   });
 
   console.log("uploading")
@@ -82,6 +86,8 @@ router.route('/update/:id').post((req, res) => {
       exercise.date = exercise.date;
       exercise.ingredients = req.body.ingredients;
       exercise.image = req.body.image;
+      exercise.totalRating = req.body.totalRating;
+      exercise.numRatings = req.body.numRatings;
 
       exercise.save()
         .then(() => res.json('Exercise updated!'))
