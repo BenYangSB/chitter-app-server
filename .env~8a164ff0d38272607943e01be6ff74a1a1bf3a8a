@@ -1,0 +1,4 @@
+ATLAS_URI=mongodb+srv://BenjaminYang:BenjyBenjy_49@cluster0.bjmoo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+AWS_BUCKETNAME = "chitter-app-assets2"
+AWS_ID="AKIAZ7CF2ZAR2EUDUYKM"
+AWS_SECRET="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"
