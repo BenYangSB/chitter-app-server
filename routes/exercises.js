@@ -40,7 +40,7 @@ router.route('/add').post((req, res) => {
 
   newExercise.save()
   .then(() => res.json(newExercise._id))    // im trying to make res get set to the object id fo the newly saved recipe (not sure how)
-  .catch(err => res.status(400).json('Error: ' + err));
+  .catch(err => console.log(err));
 });
 
 router.route('/:id').get((req, res) => {
@@ -75,8 +75,6 @@ router.route('/update/:id').post((req, res) => {
 
   Exercise.findById(req.params.id)
     .then(exercise => {
-      console.log(exercise)
-      console.log(req.body)
 
       exercise.username = exercise.username;
       exercise.userKey = exercise.userKey;
@@ -88,6 +86,7 @@ router.route('/update/:id').post((req, res) => {
       exercise.image = req.body.image;
       exercise.totalRating = req.body.totalRating;
       exercise.numRatings = req.body.numRatings;
+
 
       exercise.save()
         .then(() => res.json('Exercise updated!'))
