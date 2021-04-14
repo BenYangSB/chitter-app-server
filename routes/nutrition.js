@@ -5,13 +5,13 @@ require('dotenv/config');
 var NutritionRouter = express.Router();
 
 NutritionRouter.route("/").post((req, res) => {
-    // let recipe = {
+    // const recipe = {
     //     "title": req.body.description,
     //     "prep": req.body.instructions,
     //     "yield": req.body.servings ? req.body.servings : "1 serving",
     //     "ingr": req.body.ingredients
     // };
-    let recipe = {
+    const recipe = {
         "title": "Fresh Ham Roasted With Rye Bread and Dried Fruit Stuffing",
         "prep": "1. Have your butcher bone and butterfly the ham and score the fat in a diamond pattern. ...",
         "yield": "About 15 servings",
@@ -33,7 +33,7 @@ NutritionRouter.route("/").post((req, res) => {
         ]
     };
 
-    axios.post(`https://api.edamam.com/api/nutrition-data?app_id=${process.env.NUTRITION_APP_ID}&app_key=${process.env.NUTRITION_APP_KEY}`, recipe)
+    axios.post(`https://api.edamam.com/api/nutrition-details?app_id=${process.env.NUTRITION_APP_ID}&app_key=${process.env.NUTRITION_APP_KEY}`, recipe)
         .then(nutrition => res.json(nutrition))
         .catch(err => console.log("Error when posting recipe to API: " + err));
 
