@@ -13,7 +13,8 @@ const exerciseSchema = new Schema({
   ingredients: { type: Array, required: true },
   image: { type: String, required: true },
   totalRating: {type: Number, required: true},
-  numRatings: {type: Number, required: true}
+  numRatings: {type: Number, required: true},
+  servings: {type: String, required : false}
   
 }, {
   timestamps: true,
