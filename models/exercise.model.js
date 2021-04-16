@@ -14,8 +14,8 @@ const exerciseSchema = new Schema({
   image: { type: String, required: true },
   totalRating: {type: Number, required: true},
   numRatings: {type: Number, required: true},
-  servings: {type: String, required : false}
-  
+  servings: {type: String, required : false},
+  nutritionEtagAndId : {type: Object, required : false}  // store etag and object id of nutrition
 }, {
   timestamps: true,
 });

@@ -22,6 +22,7 @@ router.route('/add').post((req, res) => {
   const totalRating = req.body.totalRating;
   const numRatings = req.body.numRatings;
   const servings = req.body.servings;
+  const nutritionEtagAndId = req.body.nutritionEtagAndId;  // most likely will be null (that is fine)
 
 
   const newExercise = new Exercise({
@@ -35,7 +36,8 @@ router.route('/add').post((req, res) => {
     instructions,
     totalRating,
     numRatings,
-    servings
+    servings,
+    nutritionEtagAndId
   });
 
   console.log("uploading")
@@ -69,7 +71,13 @@ router.route('/myRecipes/:id').get((req, res) => {
 
 router.route('/:id').delete((req, res) => {
   Exercise.findByIdAndDelete(req.params.id)
-    .then(() => res.json('Exercise deleted.'))
+    .then((exercise) => {
+      if (exercise.nutritionEtagAndId) {
+        axios.delete('http://localhost:5000//db/recipe/delete/'+exercise.nutritionEtagAndId)
+          .catch(err => console.log(err));
+      }
+      res.json('Exercise deleted.')
+    })
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
@@ -89,6 +97,7 @@ router.route('/update/:id').post((req, res) => {
       exercise.totalRating = req.body.totalRating;
       exercise.numRatings = req.body.numRatings;
       exercise.servings = req.body.servings;
+      exercise.nutritionEtagAndId = req.body.nutritionEtagAndId;
 
 
       exercise.save()
