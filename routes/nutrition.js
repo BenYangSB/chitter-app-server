@@ -96,8 +96,24 @@ NutritionRouter.route("/api/item").get((req, res) => {
     // console.log(req.query.ingredients)
     let urlEncodedIngredients = encodeURIComponent(req.query.ingredients);
     console.log("Encoded ingr: " + urlEncodedIngredients);
-    axios.get(`https://api.edamam.com/api/nutrition-data?app_id=${process.env.NUTRITION_APP_ID}&app_key=${process.env.NUTRITION_APP_KEY}&ingr=${urlEncodedIngredients}`, { headers: { 'If-None-Match': req.query.etag } })
-        .then(response => res.json(response.data))
+
+    const headers = {headers: { 'If-None-Match': req.query.etag }};
+    if (req.query.etag == "none") {
+        headers.headers = null;
+    }
+    axios.get(`https://api.edamam.com/api/nutrition-data?app_id=${process.env.NUTRITION_APP_ID}&app_key=${process.env.NUTRITION_APP_KEY}&ingr=${urlEncodedIngredients}`, { headers })
+        .then(response => {
+
+            response.data.etag = response.headers.etag;
+            // save nutrition response to database
+            axios.post('http://localhost:5000/nutrition/db/recipe/add/' + response.headers.etag, response.data)
+                .then((addRes) => {
+                    response.data.id = addRes.data;
+                    res.json(response.data)
+                    console.log("Id for nutrition in db: " + addRes.data);
+                })
+                .catch(err => console.log("Error when saving nutrition data to db: "+ err));
+        })
         .catch(err => {
             if (err.message == Err304Msg) {
                 res.json({ alreadyInDatabase: true });
