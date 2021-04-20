@@ -109,6 +109,7 @@ NutritionRouter.route("/api/item").get((req, res) => {
         .then(response => {
 
             response.data.etag = response.headers.etag;
+            response.data.yield = 1;
             // save nutrition response to database
             axios.post('http://localhost:5000/nutrition/db/recipe/add/' + response.headers.etag, response.data)
                 .then((addRes) => {
