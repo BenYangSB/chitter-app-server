@@ -41,6 +41,7 @@ NutritionRouter.route("/db/recipe/delete/:id").delete((req, res) => {
 
 // =========================== Post and Get to API =======================================
 const Err304Msg = "Request failed with status code 304";    // 304 status code means recipe already in database
+const Err555Msg = "Request failed with status code 555"; // 555 status code means recipe quality is too low, no numbers, servings size is too large or small
 
 // doc for how to use api: https://developer.edamam.com/edamam-docs-nutrition-api
 NutritionRouter.route("/api/recipe").post((req, res) => { // send in a recipe in json format, works for a recipe
@@ -82,6 +83,9 @@ NutritionRouter.route("/api/recipe").post((req, res) => { // send in a recipe in
             if (err.message == Err304Msg) {
                 res.json({ alreadyInDatabase: true });
             }
+            else if (err.message == Err555Msg) {
+                res.json({recipeQualityTooLow : true})
+            }
             else
                 console.log("Error when posting recipe to API (If status code is 304, means we already have this recipe in the database): " + err);
         });
@@ -93,7 +97,7 @@ NutritionRouter.route("/api/item").get((req, res) => {
     // console.log("req.body: " + req.body);
     // console.log("req.query: "+ req.query);
     // console.log("req.params: "+req.params);
-    // console.log(req.query.ingredients)
+    console.log(req.query.ingredients)
     let urlEncodedIngredients = encodeURIComponent(req.query.ingredients);
     console.log("Encoded ingr: " + urlEncodedIngredients);
 
@@ -117,6 +121,9 @@ NutritionRouter.route("/api/item").get((req, res) => {
         .catch(err => {
             if (err.message == Err304Msg) {
                 res.json({ alreadyInDatabase: true });
+            }
+            else if (err.message == Err555Msg) {
+                res.json({recipeQualityTooLow : true})
             }
             else
                 console.log("Error when getting recipe to API (If status code is 304, means we already have this recipe in the database): " + typeof (err))
