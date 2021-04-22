@@ -43,8 +43,8 @@ router.route('/add').post((req, res) => {
   console.log("uploading")
 
   newExercise.save()
-  .then(() => res.json(newExercise._id))    // im trying to make res get set to the object id fo the newly saved recipe (not sure how)
-  .catch(err => console.log(err));
+    .then(() => res.json(newExercise._id))    // im trying to make res get set to the object id fo the newly saved recipe (not sure how)
+    .catch(err => console.log(err));
 });
 
 router.route('/:id').get((req, res) => {
@@ -58,31 +58,29 @@ router.route('/feed/:id').get((req, res) => {
 
   let following = [];
   console.log(req);
-  Exercise.find({userKey: req.params.id})
+  Exercise.find({ userKey: req.params.id })
     .then(exercise => res.json(exercise))
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
 router.route('/myRecipes/:id').get((req, res) => {
-  Exercise.find({userKey : req.params.id})
+  Exercise.find({ userKey: req.params.id })
     .then(exercise => res.json(exercise))
-    .catch(err => res.status(400).json('Error: '+ err));
+    .catch(err => res.status(400).json('Error: ' + err));
 });
 
 router.route('/:id').delete((req, res) => {
   Exercise.findByIdAndDelete(req.params.id)
-    .then((exercise) => {
-      if (exercise.nutritionEtagAndId) {
-        axios.delete('http://localhost:5000//db/recipe/delete/'+exercise.nutritionEtagAndId)
-          .catch(err => console.log(err));
-      }
+    .then(exercise => {
+          console.log("Deleting nutrtion from db" + exercise.nutritionEtagAndId.id);
+          axios.delete('http://localhost:5000/nutrition/db/recipe/delete/' + exercise.nutritionEtagAndId.id)
+            .catch(err => console.log(err));
       res.json('Exercise deleted.')
     })
     .catch(err => res.status(400).json('Error: ' + err));
 });
 
 router.route('/update/:id').post((req, res) => {
-
   Exercise.findById(req.params.id)
     .then(exercise => {
 
